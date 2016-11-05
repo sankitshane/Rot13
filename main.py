@@ -1,5 +1,6 @@
 import webapp2
 import re
+from Blog.index import blog,newpost
 
 form="""
     <form method="post">
@@ -112,5 +113,7 @@ app = webapp2.WSGIApplication([
     ('/', MainPage),
     ('/rot13',Rot13),
     ('/validate',validate),
-    ('/validate/welcome',welcomeHandler)
+    ('/validate/welcome',welcomeHandler),
+    ('/blog',blog),
+    ('/blog/newpost',newpost)
 ], debug=True)
