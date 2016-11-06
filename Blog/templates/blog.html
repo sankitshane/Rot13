@@ -1,4 +1,11 @@
 {% extends "base.html" %}
 {% block content %}
     <h2>U r in the blog room</h2>
+    {% for blog in blogs %}
+      <div class="blog">
+        <div class="blog-title">{{blog.title}}</div>
+        <pre class="blog-body">{{blog.content}}</pre>
+        <div class="blog-time">{{blog.created}}</div>
+      </div>
+    {% endfor %}
 {% endblock %}

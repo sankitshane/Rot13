@@ -3,11 +3,47 @@
   <head>
     <meta charset="utf-8">
     <title>Base</title>
+    <style>
+      body {
+          font-family: sans-serif;
+          width: 800px;
+          margin: 0 auto;
+          padding: 10px;
+      }
+      .error {
+        color: red;
+      }
+      label {
+        display: block;
+        font-size: 20px;
+      }
+      input[type = submit] {
+        font-size: 24px;
+      }
+      hr {
+        margin: 20px auto;
+      }
+      .blog + .blog {
+        margin-top: 20px;
+      }
+      .blog-body {
+        margin: 0;
+        font-size: 17px;
+      }
+      .blog-title {
+        font-weight: bold;
+        font-size: 20px;
+      }
+      .blog-time{
+        margin: 0;
+        font-size: 17px;
+      }
+    </style>
   </head>
   <body>
     <h1>CS 253 Blog</h1>
     {% block content %}
-      
+
     {% endblock %}
   </body>
 </html>
