@@ -88,3 +88,9 @@ class login(Handler):
                 self.redirect('/login')
         else:
             self.redirect('/login')
+
+class logout(webapp2.RequestHandler):
+    def get(self):
+        a = " "
+        self.response.headers.add_header('Set-Cookie','user=; Path=/')
+        self.redirect('/signup')

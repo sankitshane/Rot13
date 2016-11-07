@@ -1,7 +1,16 @@
 import webapp2
 import re
+import os
+import jinja2
+
 from Blog.index import blog,newpost,Postpage
-from Signup.login import Signup,login
+from Signup.login import Signup,login,logout
+
+from google.appengine.ext import db
+
+template_dir = os.path.join(os.path.dirname(__file__),'templates')
+jinja_env = jinja2.Environment(loader = jinja2.FileSystemLoader(template_dir),
+autoescape= True)
 
 form="""
     <form method="post">
@@ -11,13 +20,6 @@ form="""
         <input type="submit">
     </form>
 """
-
-wel_from = """
-    <form>
-        <h2>Welcome </h2>
-    <from>
-"""
-
 
 class Rot13(webapp2.RequestHandler):
     def rot13(self,n_text):
@@ -50,11 +52,14 @@ class Rot13(webapp2.RequestHandler):
         text = self.request.get("boxtext")
         self.write_back(self.rot13(text))
 
-class MainPage(webapp2.RequestHandler):
-    def get(self):
-        self.response.out.write("Welcome to my app")
-
-
+class Handler(webapp2.RequestHandler):
+    def write(self,*a,**kw):
+        self.response.out.write(*a,**kw)
+    def render_str(self,template,**params):
+        t = jinja_env.get_template(template)
+        return t.render(params)
+    def render(self,template,**kw):
+        self.write(self.render_str(template,**kw))
 
 class welcomeHandler(webapp2.RequestHandler):
     def get(self):
@@ -65,11 +70,9 @@ class welcomeHandler(webapp2.RequestHandler):
         else:
             self.redirect('/signup')
 
-class logout(webapp2.RequestHandler):
+class MainPage(Handler):
     def get(self):
-        a = " "
-        self.response.headers.add_header('Set-Cookie','user=; Path=/')
-        self.redirect('/signup')
+        self.render("welcome.html")
 
 app = webapp2.WSGIApplication([
     ('/', MainPage),
