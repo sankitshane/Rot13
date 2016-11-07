@@ -1,11 +1,22 @@
 {% extends "base.html" %}
 {% block content %}
-    <h2>U r in the blog room</h2>
+
     {% for blog in blogs %}
-      <div class="blog">
-        <div class="blog-title">{{blog.title}}</div>
-        <pre class="blog-body">{{blog.content}}</pre>
-        <div class="blog-time">{{blog.created}}</div>
-      </div>
+    <div class="post">
+  <div class="post-heading">
+    <div class="post-title">
+      {{blog.title}}
+    </div>
+
+    <div class="post-date">
+      {{blog.created.strftime("%b %d, %Y")}}
+    </div>
+  </div>
+
+  <div class="post-content">
+    {{blog.content | safe}}
+  </div>
+</div>
+
     {% endfor %}
 {% endblock %}
