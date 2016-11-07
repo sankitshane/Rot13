@@ -1,7 +1,7 @@
 import webapp2
 import re
 from Blog.index import blog,newpost,Postpage
-from Signup.login import Signup
+from Signup.login import Signup,login
 
 form="""
     <form method="post">
@@ -59,9 +59,17 @@ class MainPage(webapp2.RequestHandler):
 class welcomeHandler(webapp2.RequestHandler):
     def get(self):
         user = self.request.cookies.get('user')
-        a = 'welcome ' + user
-        self.response.out.write(a)
+        if user:
+            a = 'welcome ' + user
+            self.response.out.write(a)
+        else:
+            self.redirect('/signup')
 
+class logout(webapp2.RequestHandler):
+    def get(self):
+        a = " "
+        self.response.headers.add_header('Set-Cookie','user=; Path=/')
+        self.redirect('/signup')
 
 app = webapp2.WSGIApplication([
     ('/', MainPage),
@@ -70,5 +78,7 @@ app = webapp2.WSGIApplication([
     ('/welcome',welcomeHandler),
     ('/blog',blog),
     ('/blog/newpost',newpost),
-    ('/blog/([0-9]+)',Postpage)
+    ('/blog/([0-9]+)',Postpage),
+    ('/login',login),
+    ('/welcome/logout',logout)
 ], debug=True)

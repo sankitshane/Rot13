@@ -31,6 +31,10 @@ class Handler(webapp2.RequestHandler):
     def render(self,template,**kw):
         self.write(self.render_str(template,**kw))
 
+class User(db.Model):
+    username = db.StringProperty(required = True)
+    password = db.StringProperty(required = True)
+
 class Signup(Handler):
     def get(self):
         self.render("signup-form.html")
@@ -63,5 +67,24 @@ class Signup(Handler):
         if have_error:
             self.render('signup-form.html', **params)
         else:
+            new = User(username = username, password = password)
+            new.put()
             self.response.headers.add_header('Set-Cookie','user = %s' % str(username))
             self.redirect('/welcome')
+
+class login(Handler):
+    def get(self):
+        self.render('login.html')
+    def post(self):
+        username = self.request.get('login_name')
+        password = self.request.get('pass')
+
+        if username and password:
+            validate = db.GqlQuery("SELECT * FROM User WHERE username= :1 and password= :2",str(username),str(password))
+            if validate:
+                self.response.headers.add_header('Set-Cookie','user = %s'% str(username))
+                self.redirect('/welcome')
+            else:
+                self.redirect('/login')
+        else:
+            self.redirect('/login')
